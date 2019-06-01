@@ -32,6 +32,33 @@ module.exports = appInfo => {
         password: 'teng123456',
     };
 
+    config.io = {
+        init: {}, // passed to engine.io
+        namespace: {
+            // 命名空间
+            '/': {
+                connectionMiddleware: [], // 这个是连接中间件， 只在connection的时候触发
+                packetMiddleware: [], // 这个会在每次消息的时候触发
+            },
+            '/example': {
+                connectionMiddleware: [],
+                packetMiddleware: [],
+            },
+        },
+        redis: {
+            host: '127.0.0.1',
+            port: 6379
+        }
+    };
+    // config.io = {
+    //     init: {}, // passed to engine.io
+    //     namespace: {
+    //         '/': {
+    //             connectionMiddleware: [],
+    //             packetMiddleware: [],
+    //         },
+    //     },
+    // }
 
     return {
         ...config,

@@ -4,6 +4,14 @@
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
-  const { router, controller } = app;
-  router.get('/', controller.home.index);
+    const {
+        router,
+        controller,
+        io
+    } = app;
+    router.get('/', controller.home.index);
+
+    // socket.io
+    io.of('/').route('sendMsg', io.controller.chat.sendMsg);
+    io.of('/').route('online', io.controller.chat.online);
 };

@@ -31,17 +31,17 @@ module.exports = app => {
 
     class UserInfoService extends Service {
         async createAccount() {
-            // const result = await UserInfo.findAll({
-            //     raw: true,
-            //     where: {
-            //         user_name: 'jacktest'
-            //     },
-            //     include: [{
-            //         model: CsMessage
-            //     }]
-            // });
+            const result = await UserInfo.findAll({
+                raw: true,
+                where: {
+                    user_name: 'jacktest'
+                },
+                include: [{
+                    model: CsMessage
+                }]
+            });
 
-            // return result;
+            return result;
         }
     }
 
