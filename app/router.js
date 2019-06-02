@@ -12,6 +12,15 @@ module.exports = app => {
     router.get('/', controller.home.index);
 
     // socket.io
-    io.of('/').route('sendMsg', io.controller.chat.sendMsg);
-    io.of('/').route('online', io.controller.chat.online);
+    // 上线通知 
+    io.of('/').route('CLIENT_ON_LINE', io.controller.chat.onLine);
+    io.of('/').route('SERVER_ON_LINE', io.controller.chat.onLine);
+
+    // 离线
+    io.of('/').route('CLIENT_OFF_LINE', io.controller.chat.offLine)
+    io.of('/').route('SERVER_OFF_LINE', io.controller.chat.offLine)
+
+    // 发送信息
+    io.of('/').route('CLIENT_SENDMSG', io.controller.chat.sendMsg);
+    io.of('/').route('SERVER_SENDMSG', io.controller.chat.sendMsg);
 };
