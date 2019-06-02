@@ -12,26 +12,92 @@
     <script src="../io/socket.io.js">
     </script>
     <script>
-        var socket = io('http://127.0.0.1:7003');
+        var socket = io('http://127.0.0.1:7001');
         socket.on('connect', function() {
             console.log('链接成功');
         });
-
-        socket.emit("online", {
-            user: 'jackteng'
-        })
-
         socket.on('disconnect', function() {
-            console.log('断开连级');
+            console.log('断开连接');
         });
-        socket.on("broadcast", function(data) {
-            console.log(data)
-            document.write(data.user)
+
+        // 访客上线
+        socket.emit("CLIENT_ON_LINE", {
+            type: 'CLIENT_ON_LINE', // 访客
+            user: 'jackteng',
+            nickname: '小小程序员',
+            age: 24,
         })
 
-        socket.emit("sendMsg", {
-            message: '发送信息'
+        window.onbeforeunload = function() {
+
+            socket.emit("CLIENT_OFF_LINE", {
+                type: 'CLIENT_ON_LINE', // 访客
+                user: 'jackteng',
+                nickname: '小小程序员',
+                age: 24,
+            })
+            socket.emit("SERVER_OFF_LINE", {
+                type: 'SERVER_ON_LINE', // 客服
+                user: 's.xiaoai',
+                nickname: '小艾',
+                age: 24
+            })
+
+        }
+
+
+
+        // 客服上线
+        socket.emit("SERVER_ON_LINE", {
+            type: 'SERVER_ON_LINE', // 客服
+            user: 's.xiaoai',
+            nickname: '小艾',
+            age: 24
         })
+
+        // 监听客服系统信息
+        socket.on('SYSTEM_MESSAGE_SERVER', function(data) {
+            console.log("这是收到客服系统推送的信息")
+            console.log(data);
+        });
+
+        // 监听访客系统信息
+        socket.on('SYSTEM_MESSAGE_CLIENT', function(data) {
+            console.log("这是收到访客系统推送的信息")
+            console.log(data);
+        });
+
+
+        // 客服发出了一条信息
+        socket.emit("SERVER_SENDMSG", {
+            type: 'SERVER_MESSAGE', // 客服
+            userID: 's.xiaoai@cs',
+            toUserId: 'jackteng@cs',
+            message: '您好，请问有什么可以帮您吗？'
+        })
+
+        // 访客发出了一条信息
+        socket.emit("CLIENT_SENDMSG", {
+            type: 'CLIENT_MESSAGE', // 访客
+            userID: 'jackteng@cs',
+            toUserId: 's.xiaoai@cs',
+            message: '小艾同学您好～'
+        })
+
+
+        // 角色：访客端 ----> 监听访客发送信息
+        socket.on('SERVER_MESSAGE', function(data) {
+            console.log('这是监听 客服 ---->  访客')
+            console.log(data)
+                // if (data.toUserId !== userID) return;
+        });
+
+        // 角色：客服端 ----> 监听客服发送信息
+        socket.on('CLIENT_MESSAGE', function(data) {
+            console.log('这是监听 访客 ---->  客服')
+            console.log(data)
+                // if (data.toUserId !== userId) return;
+        });
     </script>
 </body>
 
